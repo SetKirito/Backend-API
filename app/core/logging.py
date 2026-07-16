@@ -12,15 +12,17 @@ def _build_logger(name: str, filename: str, level: int) -> logging.Logger:
     logger.setLevel(level)
     logger.propagate = False
 
-    if not logger.handlers:
-        formatter = logging.Formatter(
-            "%(asctime)s - %(levelname)s - %(message)s",
-            datefmt="%Y-%m-%d %H:%M:%S",
-        )
+    formatter = logging.Formatter(
+        "%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
+    if not any(isinstance(handler, RotatingFileHandler) for handler in logger.handlers):
         file_handler = RotatingFileHandler(LOGS_DIR / filename, maxBytes=5 * 1024 * 1024, backupCount=3)
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 
+    if not any(isinstance(handler, logging.StreamHandler) and not isinstance(handler, RotatingFileHandler) for handler in logger.handlers):
         stream_handler = logging.StreamHandler()
         stream_handler.setFormatter(formatter)
         logger.addHandler(stream_handler)

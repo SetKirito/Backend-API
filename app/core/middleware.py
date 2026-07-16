@@ -18,9 +18,11 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
         except Exception:
             duration_ms = round((time.perf_counter() - start_time) * 1000, 2)
             error_logger.exception(
-                "Exception occurred\nTime: %s\nMethod: %s\nURL: %s\nStatus: 500\nIP: %s\nDuration: %.2f ms",
+                "Exception occurred\nTime: %s\nMethod: %s\nURL: %s\nStatus: %s\nIP: %s\nDuration: %.2f ms",
+                time.strftime("%Y-%m-%d %H:%M:%S"),
                 request.method,
                 request.url.path,
+                500,
                 client_ip,
                 duration_ms,
             )
@@ -29,6 +31,7 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
         duration_ms = round((time.perf_counter() - start_time) * 1000, 2)
         request_logger.info(
             "Time: %s\nMethod: %s\nURL: %s\nStatus: %s\nIP: %s\nDuration: %.2f ms",
+            time.strftime("%Y-%m-%d %H:%M:%S"),
             request.method,
             request.url.path,
             response.status_code,
