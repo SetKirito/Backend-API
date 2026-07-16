@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.controllers.contact_controller import ContactController
-from app.database import SessionLocal
+from app.core.database import SessionLocal
 from app.schemas.contact import ContactRequest
 from app.services.contact_service import ContactService
 from app.repositories.contact_repository import ContactRepository
